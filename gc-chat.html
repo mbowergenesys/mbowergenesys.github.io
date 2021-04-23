@@ -14,13 +14,21 @@
             </script>
             <script>
                 var webSocket;
+                const readyStates = {
+                    0: 'CONNECTING',
+                    1: 'OPEN',
+                    2: 'CLOSING',
+                    3: 'CLOSED'
+                };
+
                 function establishWebsocketConnection() {
                     if(!webSocket) {
                         var webMessagingUrl = 'wss://webmessaging.inindca.com/v1?deploymentId=c81cd282-4969-4c8f-acee-dfa0777a5ca0'
                         webSocket = new WebSocket(webMessagingUrl);
+                        console.log('### WebSocket readystate: ', readyStates[webSocket.readyState]);
 
-                        if(webSocket.readyState === 'CONNECTING') {
-                            console.log('### Websocket is connecting: ', webSocket);
+                        if(readyStates[webSocket.readyState] === 'CONNECTING') {
+                            console.log('### Websocket is connecting', );
                         }
                     }
 

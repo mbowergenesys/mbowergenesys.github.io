@@ -14,7 +14,9 @@
             </script>
             <script>
                 var webSocket;
-                const readyStates = {
+                const UUID_TOKEN = '01234';
+                const DEPLOYMENT_ID = 'c81cd282-4969-4c8f-acee-dfa0777a5ca0'
+                const READY_STATES = {
                     0: 'CONNECTING',
                     1: 'OPEN',
                     2: 'CLOSING',
@@ -23,39 +25,49 @@
 
                 function establishWebsocketConnection() {
                     if(!webSocket) {
-                        var webMessagingUrl = 'wss://webmessaging.inindca.com/v1?deploymentId=c81cd282-4969-4c8f-acee-dfa0777a5ca0'
+                        var webMessagingUrl = 'wss://webmessaging.inindca.com/v1?deploymentId=' + DEPLOYMENT_ID;
                         webSocket = new WebSocket(webMessagingUrl);
-                        console.log('### WebSocket readystate: ', readyStates[webSocket.readyState]);
+                        console.log('### WebSocket readystate: ', READY_STATES[webSocket.readyState]);
 
-                        if(readyStates[webSocket.readyState] === 'CONNECTING') {
+                        if(READY_STATES[webSocket.readyState] === 'CONNECTING') {
                             console.log('### Websocket is connecting', );
-                            var pollInterval = setInterval(function(){ // this feels a little side-effect-y
-                                if(waitForReadyStateOpen(webSocket)) {
+                            var pollInterval = setInterval(function(){ // possibly use a promise here instead...
+                                if(isReadyStateOpen(webSocket)) {
                                     clearInterval(pollInterval);
-                                    registerWebSocketListeners();
+                                    registerWebSocketListeners(webSocket);
+                                    sendConfigureSessionMessage(webSocket);
                                 }
-                            }, 10000)
-                            //waitForReadyStateOpen(webSocket, registerWebSocketListeners);
+                            }, 10000);
                         }
                     }
                 }
 
-                function waitForReadyStateOpen(webSocket) {
+                function isReadyStateOpen(webSocket) {
                     console.log('### websocket: ', webSocket);
                     if(webSocket) {
-                        console.log('### ReadyState is; ', readyStates[webSocket.readyState]);
-                        if(readyStates[webSocket.readyState] === 'OPEN') {
+                        console.log('### ReadyState is; ', READY_STATES[webSocket.readyState]);
+                        if(READY_STATES[webSocket.readyState] === 'OPEN') {
                             return true;
-                            //if(callback) {
-                            //    callback();
-                            //}
-                            //clearInterval(pollInterval);
                         }
+                        return false;
                     }
                 }
 
-                function registerWebSocketListeners() {
-                    console.log('### ready for listeners');
+                function sendConfigureSessionMessage(webSocket) {
+                    console.log('### attempting to configure session');
+                    let configureSessionObject = {
+                        action: 'configureSession',
+                        deploymentId: DEPLOYMENT_ID,
+                        token: UUID_TOKEN
+                    };
+                    webSocket.send(configureSessionObject);
+
+                }
+
+                function registerWebSocketListeners(webSocket) {
+                    webSocket.onMessage = function(event) {
+                        console.log('### Socket event: ', event.data);
+                    }
                 }
 
                 establishWebsocketConnection();

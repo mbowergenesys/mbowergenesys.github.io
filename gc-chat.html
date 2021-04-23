@@ -29,24 +29,29 @@
 
                         if(readyStates[webSocket.readyState] === 'CONNECTING') {
                             console.log('### Websocket is connecting', );
-                            waitForReadyStateOpen(webSocket, registerWebSocketListeners);
+                            var pollInterval = setInterval(function(){ // this feels a little side-effect-y
+                                if(waitForReadyStateOpen(webSocket)) {
+                                    clearInterval(pollInterval);
+                                    registerWebSocketListeners();
+                                }
+                            }, 10000)
+                            //waitForReadyStateOpen(webSocket, registerWebSocketListeners);
                         }
                     }
                 }
 
-                function waitForReadyStateOpen(webSocket, callback) {
-                    var pollInterval = setInterval(function(webSocket){
-                        console.log('### websocket: ', webSocket);
-                        if(webSocket) {
-                            console.log('### ReadyState is; ', readyStates[webSocket.readyState]);
-                            if(readyStates[webSocket.readyState] === 'OPEN') {
-                                if(callback) {
-                                    callback();
-                                }
-                                clearInterval(pollInterval);
-                            }
+                function waitForReadyStateOpen(webSocket) {
+                    console.log('### websocket: ', webSocket);
+                    if(webSocket) {
+                        console.log('### ReadyState is; ', readyStates[webSocket.readyState]);
+                        if(readyStates[webSocket.readyState] === 'OPEN') {
+                            return true;
+                            //if(callback) {
+                            //    callback();
+                            //}
+                            //clearInterval(pollInterval);
                         }
-                    }, 10000);
+                    }
                 }
 
                 function registerWebSocketListeners() {

@@ -37,7 +37,7 @@
                                     registerWebSocketListeners(webSocket);
                                     sendConfigureSessionMessage(webSocket);
                                 }
-                            }, 10000);
+                            }, 1000);
                         }
                     }
                 }
@@ -45,7 +45,7 @@
                 function isReadyStateOpen(webSocket) {
                     console.log('### websocket: ', webSocket);
                     if(webSocket) {
-                        console.log('### ReadyState is; ', READY_STATES[webSocket.readyState]);
+                        console.log('### ReadyState is: ', READY_STATES[webSocket.readyState]);
                         if(READY_STATES[webSocket.readyState] === 'OPEN') {
                             return true;
                         }
@@ -61,7 +61,7 @@
                         token: UUID_TOKEN
                     };
                     webSocket.send(configureSessionObject);
-
+                    webSocket.send (JSON.stringify(configureSessionObject));
                 }
 
                 function registerWebSocketListeners(webSocket) {

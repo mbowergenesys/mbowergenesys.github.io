@@ -85,8 +85,9 @@
 
                 function registerWebSocketListeners(webSocket) {
                     webSocket.onmessage = function(event) {
+                        message = JSON.parse(event.data);
                         console.log('### Socket event: ', event.data);
-                        if(event.data.class === 'sessionResponse') {
+                        if(message.class === 'sessionResponse') {
                             handleSessionResponse();
                         }
                     }

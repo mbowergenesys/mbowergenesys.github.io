@@ -29,13 +29,27 @@
 
                         if(readyStates[webSocket.readyState] === 'CONNECTING') {
                             console.log('### Websocket is connecting', );
+                            waitForReadyStateOpen(webSocket, registerWebSocketListeners);
                         }
                     }
+                }
 
+                function waitForReadyStateOpen(webSocket, callback) {
+                    var pollInterval = setInterval(function(webSocket){
+                        console.log('### ReadyState is; ', readyStates[webSocket.readyState]);
+                        if(readyStates[webSocket.readyState] === 'OPEN') {
+                            if(callback) {
+                                callback();
+                            }
+                            clearInterval(pollInterval);
+                        }
+                    }, 10000);
+
+                    pollInterval();
                 }
 
                 function registerWebSocketListeners() {
-
+                    console.log('### ready for listeners');
                 }
 
                 establishWebsocketConnection();

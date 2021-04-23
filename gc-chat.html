@@ -60,12 +60,12 @@
                         deploymentId: DEPLOYMENT_ID,
                         token: UUID_TOKEN
                     };
-                    webSocket.send(configureSessionObject);
+                    //webSocket.send(configureSessionObject);
                     webSocket.send (JSON.stringify(configureSessionObject));
                 }
 
                 function registerWebSocketListeners(webSocket) {
-                    webSocket.onMessage = function(event) {
+                    webSocket.onmessage = function(event) {
                         console.log('### Socket event: ', event.data);
                     }
                 }

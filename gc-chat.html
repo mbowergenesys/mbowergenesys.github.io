@@ -75,7 +75,7 @@
                           action: 'onMessage',
                           message: {
                               type: 'Text',
-                              text: ''
+                              text: 'Hello, this is a customer'
 
                           }
                       }
@@ -87,7 +87,7 @@
                     webSocket.onmessage = function(event) {
                         message = JSON.parse(event.data);
                         console.log('### Socket event: ', event.data);
-                        if(message.class === 'sessionResponse') {
+                        if(message.class === 'SessionResponse') {
                             handleSessionResponse();
                         }
                     }

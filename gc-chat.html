@@ -60,14 +60,45 @@
                         deploymentId: DEPLOYMENT_ID,
                         token: UUID_TOKEN
                     };
-                    //webSocket.send(configureSessionObject);
-                    webSocket.send (JSON.stringify(configureSessionObject));
+                    webSocket.send(JSON.stringify(configureSessionObject));
+                }
+
+                function sendChatMessage() {
+                    /*{
+                        "action": "onMessage",
+                        "message": {
+                          "type": "Text",
+                          "text": "This is the message from the guest"
+                        }
+                      }*/
+                      var messageToSend = {
+                          action: 'onMessage',
+                          message: {
+                              type: 'Text',
+                              text: ''
+
+                          }
+                      }
+                      webSocket.send(JSON.stringify(messageToSend));
+
                 }
 
                 function registerWebSocketListeners(webSocket) {
                     webSocket.onmessage = function(event) {
                         console.log('### Socket event: ', event.data);
+                        if(event.data.class === 'sessionResponse') {
+                            handleSessionResponse();
+                        }
                     }
+                }
+
+                function handleSessionResponse() {
+                    console.log('### sending a new message');
+                    sendChatMessage();
+                }
+
+                function handleStructuredMessage() {
+
                 }
 
                 establishWebsocketConnection();

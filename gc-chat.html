@@ -36,6 +36,7 @@
 
                 function waitForReadyStateOpen(webSocket, callback) {
                     var pollInterval = setInterval(function(webSocket){
+                        console.log('### websocket: ', webSocket);
                         if(webSocket) {
                             console.log('### ReadyState is; ', readyStates[webSocket.readyState]);
                             if(readyStates[webSocket.readyState] === 'OPEN') {

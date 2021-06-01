@@ -63,24 +63,21 @@
                     webSocket.send(JSON.stringify(configureSessionObject));
                 }
 
-                function sendChatMessage() {
-                    /*{
-                        "action": "onMessage",
-                        "message": {
-                          "type": "Text",
-                          "text": "This is the message from the guest"
-                        }
-                      }*/
+                function sendChatMessage(chatText) {
                       var messageToSend = {
                           action: 'onMessage',
                           message: {
                               type: 'Text',
-                              text: 'Hello, this is a customer'
+                              text: chatText
                           },
                           token: UUID_TOKEN
                       }
-                      webSocket.send(JSON.stringify(messageToSend));
-
+                      try {
+                        webSocket.send(JSON.stringify(messageToSend));
+                      } catch(err) {
+                          console.log('### error: ', err);
+                          // if err is socket closed state, try reopening...
+                      }
                 }
 
                 function registerWebSocketListeners(webSocket) {
@@ -88,24 +85,47 @@
                         message = JSON.parse(event.data);
                         console.log('### Socket event: ', event.data);
                         if(message.class === 'SessionResponse') {
-                            handleSessionResponse();
+                            handleSessionResponse(message);
+                        } if(message.class == "StructuredMessage") {
+                            handleStructuredMessage(message);
                         }
                     }
                 }
 
-                function handleSessionResponse() {
-                    console.log('### sending a new message');
-                    sendChatMessage();
+                function handleSessionResponse(messageData) {
+                    console.log('### WebMessaging session successfully configured: ', messageData);
                 }
 
-                function handleStructuredMessage() {
-
+                function handleStructuredMessage(messageData) {
+                    console.log('### StructuredMessage received: ', messageData);
                 }
 
                 establishWebsocketConnection();
+
+                function registerButtonEvent() {
+                    var sendButton = document.getElementById('messageButton');
+                    if(sendButton) {
+                        sendButton.addEventListener("click", function(){
+                            console.log('### Sending a chat message');
+                            var chatText = document.getElementById('message').textContent;
+                            sendChatMessage(chatText);
+                        });
+                    }
+                }
+
+                window.onload=function() {
+                    registerButtonEvent();
+                }
+
+
             </script>
     </head>
     <body>
 
+        <h1>Web Messaging Channel Test</h1>
+        <div>
+            <textarea id="message" name="message" size="400">Hello, I need some assistance</textarea>
+            <button type="button" id="messageButton">Send</button>
+        </div>
     </body>
 </html>

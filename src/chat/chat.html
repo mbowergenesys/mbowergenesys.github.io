@@ -3,7 +3,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     </head>
 <body>
-
     <style type='text/css'>
         .embeddedServiceHelpButton .helpButton .uiButton {
             background-color: #005290;
@@ -39,17 +38,17 @@
             embedded_svc.settings.entryFeature = 'LiveAgent';
     
             embedded_svc.init(
-                'https://genesys18-dev-ed.my.salesforce.com',
-                'https://extension-package-developer-edition.na156.force.com',
+                'https://genesys-c6-dev-ed.my.salesforce.com',
+                'https://genesys-c6-dev-ed.my.salesforce-sites.com/',
                 gslbBaseURL,
-                '00D5Y0000024UbF',
+                '00D5e000001CI5p',
                 'Chat_Embedded_Service_Deployment',
                 {
-                    baseLiveAgentContentURL: 'https://c.la3-c2-ia4.salesforceliveagent.com/content',
-                    deploymentId: '5725Y0000008yTY',
-                    buttonId: '5735Y000000DApu',
-                    baseLiveAgentURL: 'https://d.la3-c2-ia4.salesforceliveagent.com/chat',
-                    eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04I5Y000000TZM9UAO_17889514a15',
+                    baseLiveAgentContentURL: 'https://c.la4-c1-ia5.salesforceliveagent.com/content',
+                    deploymentId: '5725e000000gV5w',
+                    buttonId: '5735e000000gVJu',
+                    baseLiveAgentURL: 'https://d.la4-c1-ia5.salesforceliveagent.com/chat',
+                    eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04I5e000000XzigEAC_179c90f0763',
                     isOfflineSupportEnabled: false
                 }
             );
@@ -57,7 +56,7 @@
     
         if (!window.embedded_svc) {
             var s = document.createElement('script');
-            s.setAttribute('src', 'https://genesys18-dev-ed.my.salesforce.com/embeddedservice/5.0/esw.min.js');
+            s.setAttribute('src', 'https://genesys-c6-dev-ed.my.salesforce.com/embeddedservice/5.0/esw.min.js');
             s.onload = function() {
                 initESW(null);
             };
